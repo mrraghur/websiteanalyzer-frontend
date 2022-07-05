@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
+import { TechnologyCard } from "./components/cards";
 
 function App() {
   const [url, setUrl] = useState("");
@@ -12,20 +12,16 @@ function App() {
     e.preventDefault();
     setLoading(true);
 
-    axios
-      .get(`https://api.wappalyzer.com/lookup/v2/?urls=${url}&sets=all`, {
-        headers: {
-          "x-api-key": "MjwEbO6oF43EtgMdooTqg7OQPFhYBdG18LoZMfJ8"
-        }
-      })
+    const headers = new Headers();
+
+    fetch(`/lookup?urls=${url}&sets=all`, {
+      headers
+    })
+      .then((res) => res.json())
       .then((data) => {
         setLoading(false);
-        console.log(data);
-        if (Array.isArray(data)) {
-          setResult(data);
-        } else {
-          setResult([data]);
-        }
+        console.log("data", data);
+        setResult(data);
       })
       .catch((err) => {
         setLoading(false);
@@ -35,6 +31,7 @@ function App() {
 
   return (
     <div className="p-5">
+      <h1 className="text-4xl text-center font-bold mb-5">Technology Lookup</h1>
       <div className="mb-5 text-left border-stone-100 rounded-lg p-4 w-full sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto bg-blue-100 items-stretch">
         <h1 className="mb-4">Type in a url</h1>
         <form
@@ -61,266 +58,77 @@ function App() {
             )}
           </button>
         </form>
-        <p className="text-sm text-opacity-40">
+        {/* <p className="text-sm text-opacity-40">
           Separate urls with a comma (",")
-        </p>
+        </p> */}
       </div>
 
-      {result && (
-        <div className="flex flex-col w-screen max-w-[500px] mx-auto p-4 border-stone-100 rounded-md">
-          {result.map((item, index) => {
-            return (
-              <div key={index} className="flex flex-col">
-                <h2>{item.url}</h2>
-                <div className="p-2">
-                  <h3>Technologies:</h3>
-                  {item.technologies.map((tech, index) => (
-                    <div key={index} className="p-2">
-                      <p>
-                        Slug: <strong>{tech.slug}</strong>
-                      </p>
-                      <p>
-                        Name: <strong>{tech.name}</strong>
-                      </p>
-                      <div>
-                        <h4>Versions</h4>
-                        {tech.versions.map((version, index) => (
-                          <p key={index}>{version}</p>
-                        ))}
-                      </div>
-                      <div>
-                        <h4>Categories</h4>
-                        {tech.categories.map((category, index) => (
-                          <div key={index} className="p-2">
-                            <p>
-                              slug: <strong>{category.slug}</strong>
-                            </p>
-                            <p>
-                              name: <strong>{category.name}</strong>
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                  {item.trafficRank && (
-                    <p>
-                      trafficRank: <strong>{item.trafficRank}</strong>
-                    </p>
-                  )}
-                  {item.confirmedAt && (
-                    <p>
-                      confirmedAt: <strong>{item.confirmedAt}</strong>
-                    </p>
-                  )}
-                  {item.email && (
-                    <div>
-                      <h4>email</h4>
-                      {item.email.map((email, index) => (
-                        <p key={index} className="p-2">
-                          {email}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.verifiedEmail && (
-                    <div>
-                      <h4>verifiedEmail</h4>
-                      {item.verifiedEmail.map((email, index) => (
-                        <p key={index} className="p-2">
-                          {email}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.safeEmail && (
-                    <div>
-                      <h4>safeEmail</h4>
-                      {item.safeEmail.map((email, index) => (
-                        <p className="p-2" key={index}>
-                          {email}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.phone && (
-                    <div>
-                      <h4>phone</h4>
-                      {item.phone.map((phone, index) => (
-                        <p className="p-2" key={index}>
-                          {phone}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.linkedin && (
-                    <div>
-                      <h4>linkedin</h4>
-                      {item.linkedin.map((linkedin, index) => (
-                        <p className="p-2" key={index}>
-                          {linkedin}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.twitter && (
-                    <div>
-                      <h4>twitter</h4>
-                      {item.twitter.map((twitter, index) => (
-                        <p className="p-2" key={index}>
-                          {twitter}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.facebook && (
-                    <div>
-                      <h4>facebook</h4>
-                      {item.facebook.map((facebook, index) => (
-                        <p className="p-2" key={index}>
-                          {facebook}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.title && (
-                    <p>
-                      title: <strong>{item.title}</strong>
-                    </p>
-                  )}
-                  {item.description && (
-                    <p>
-                      description: <strong>{item.description}</strong>
-                    </p>
-                  )}
-                  {item.companyName && (
-                    <p>
-                      companyName: <strong>{item.companyName}</strong>
-                    </p>
-                  )}
-                  {item.inferredCompanyName && (
-                    <p>
-                      inferredCompanyName:{" "}
-                      <strong>{item.inferredCompanyName}</strong>
-                    </p>
-                  )}
-                  {item.industry && (
-                    <p>
-                      industry: <strong>{item.industry}</strong>
-                    </p>
-                  )}
-                  {item.about && (
-                    <p>
-                      about: <strong>{item.about}</strong>
-                    </p>
-                  )}
-                  {item.locations && (
-                    <div>
-                      <h4>locations</h4>
-                      {item.locations.map((item, index) => (
-                        <p key={index} className="p-2">
-                          {item}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.companySize && (
-                    <p>
-                      companySize: <strong>{item.companySize}</strong>
-                    </p>
-                  )}
-                  {item.companyType && (
-                    <p>
-                      companyType: <strong>{item.companyType}</strong>
-                    </p>
-                  )}
-                  {item.companyFounded && (
-                    <p>
-                      companyFounded: <strong>{item.companyFounded}</strong>
-                    </p>
-                  )}
+      {result && result.urls ? (
+        result.urls[Object.keys(result.urls)[0]].status > 0 ? (
+          <div className="flex flex-col w-screen mx-auto p-4 rounded-md">
+            <h1 className="text-3xl font-bold mb-4 border-b border-gray-200">Result</h1>
 
-                  {item.employees && (
-                    <div>
-                      <h4>employees</h4>
-                      {item.employees.map((item, index) => (
-                        <div key={index} className="p-2 ">
-                          <p>
-                            name: <strong>{item.name}</strong>
-                          </p>
-                          <p>
-                            title: <strong>{item.title}</strong>
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+            <div className="mb-3 flex items-end">
+              <h2 className="text-xl font-bold mr-2">URLs:</h2>
+              <span>
+                {Object.keys(result.urls).map((url, id) => {
+                  return (
+                    <>
+                      <a href={url} target="_blank" rel="noreferrer">
+                        {url}
+                      </a>
+                      {id !== Object.keys(result.urls).length - 1 && ", "}
+                    </>
+                  );
+                })}
+              </span>
+            </div>
 
-                  {item.keywords && (
-                    <div>
-                      <h4>keywords</h4>
-                      {item.keywords.map((item, index) => (
-                        <p key={index} className="p-2">
-                          name: <strong>{item}</strong>
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {item.technologySpeed && (
-                    <p>
-                      technologySpeed: <strong>{item.technologySpeed}</strong>
-                    </p>
-                  )}
+            <div className="mb-3">
+              <span className="text-xl font-bold mb-3">DOM Inspections:</span>
+              <p className="text-sm mb-1 px-4">
+                <span className="font-bold">Login:</span>{" "}
+                {Object.values(result.inspects.login).filter(
+                  (item) => item.length
+                ).length
+                  ? "Yes"
+                  : "No"}
+              </p>
+              <p className="text-sm mb-1 px-4">
+                <span className="font-bold">Subsription:</span>{" "}
+                {Object.values(
+                  result.inspects.subscribe.inputBtnEls[0].subscribe
+                ).filter((item) => item.length).length
+                  ? "Yes"
+                  : "No"}
+              </p>
+              <p className="text-sm mb-1 px-4">
+                <span className="font-bold">LiveChat Integration:</span>{" "}
+                {Object.values(result.inspects.livechats).filter(
+                  (item) => item.length
+                ).length
+                  ? "Yes"
+                  : "No"}
+              </p>
+            </div>
 
-                  {item.schemaOrgTypes && (
-                    <div>
-                      <h4>schemaOrgTypes</h4>
-                      {item.schemaOrgTypes.map((item, index) => (
-                        <p key={index} className="p-2">
-                          {item}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-
-                  {item["certInfo.issuer"] && (
-                    <p>
-                      certInfo.issuer:{" "}
-                      <strong>{item["certInfo.issuer"]}</strong>
-                    </p>
-                  )}
-
-                  {item["certInfo.validTo"] && (
-                    <p>
-                      certInfo.validTo:{" "}
-                      <strong>{item["certInfo.validTo"]}</strong>
-                    </p>
-                  )}
-                  {item["certInfo.protocol"] && (
-                    <p>
-                      certInfo.protocol:{" "}
-                      <strong>{item["certInfo.protocol"]}</strong>
-                    </p>
-                  )}
-                  {item.ipCountry && (
-                    <p>
-                      ipCountry: <strong>{item.ipCountry}</strong>
-                    </p>
-                  )}
-                  {item.regio && (
-                    <p>
-                      region: <strong>{item.region}</strong>
-                    </p>
-                  )}
-                  {item.language && (
-                    <p>
-                      language: <strong>{item.language}</strong>
-                    </p>
-                  )}
-                </div>
+            <div>
+              <h2 className="text-xl font-bold mb-2 border-b border-gray-200 pb-2">Technologies:</h2>
+              <div className="responsive-row pt-2">
+                {result.technologies.map((technology) => {
+                  return <TechnologyCard technology={technology} />;
+                })}
               </div>
-            );
-          })}
+            </div>
+          </div>
+        ) : (
+          <div className="mx-auto text-center">
+            <p>{result.urls[Object.keys(result.urls)[0]].error}</p>
+          </div>
+        )
+      ) : (
+        <div className="mx-auto text-center">
+          <p>Not a valud url, please type in a valid url</p>
         </div>
       )}
     </div>
