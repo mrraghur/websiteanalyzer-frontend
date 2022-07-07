@@ -63,7 +63,7 @@ function App() {
         </p> */}
       </div>
 
-      {result && result.urls ? (
+      {result ? result.urls ? (
         result.urls[Object.keys(result.urls)[0]].status > 0 ? (
           <div className="flex flex-col w-screen mx-auto p-4 rounded-md">
             <h1 className="text-3xl font-bold mb-4 border-b border-gray-200">Result</h1>
@@ -128,9 +128,9 @@ function App() {
         )
       ) : (
         <div className="mx-auto text-center">
-          <p>Not a valud url, please type in a valid url</p>
+          <p>Not a valid url, please type in a valid url</p>
         </div>
-      )}
+      ) : ""}
     </div>
   );
 }
