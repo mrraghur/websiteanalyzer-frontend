@@ -14,7 +14,7 @@ function App() {
 
     const headers = new Headers();
 
-    fetch(`https://ec2-3-86-34-249.compute-1.amazonaws.com:8080/lookup?urls=${url}&sets=all`, {
+    fetch(`http://ec2-3-86-34-249.compute-1.amazonaws.com:8080/lookup?urls=${url}&sets=all`, {
       headers
     })
       .then((res) => res.json())
