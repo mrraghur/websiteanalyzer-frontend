@@ -14,7 +14,7 @@ function App() {
 
     const headers = new Headers();
 
-    fetch(`http://ec2-3-86-34-249.compute-1.amazonaws.com:8080/lookup?urls=${url}&sets=all`, {
+    fetch(`/lookup?urls=${url}&sets=all`, {
       headers
     })
       .then((res) => res.json())
@@ -63,74 +63,86 @@ function App() {
         </p> */}
       </div>
 
-      {result ? result.urls ? (
-        result.urls[Object.keys(result.urls)[0]].status > 0 ? (
-          <div className="flex flex-col w-screen mx-auto p-4 rounded-md">
-            <h1 className="text-3xl font-bold mb-4 border-b border-gray-200">Result</h1>
+      {result ? (
+        result.urls ? (
+          result.urls[Object.keys(result.urls)[0]].status > 0 ? (
+            <div className="flex flex-col w-screen mx-auto p-4 rounded-md">
+              <h1 className="text-3xl font-bold mb-4 border-b border-gray-200">
+                Result
+              </h1>
 
-            <div className="mb-3 flex items-end">
-              <h2 className="text-xl font-bold mr-2">URLs:</h2>
-              <span>
-                {Object.keys(result.urls).map((url, id) => {
-                  return (
-                    <>
-                      <a href={url} target="_blank" rel="noreferrer">
-                        {url}
-                      </a>
-                      {id !== Object.keys(result.urls).length - 1 && ", "}
-                    </>
-                  );
-                })}
-              </span>
-            </div>
+              <div className="mb-3 flex items-end">
+                <h2 className="text-xl font-bold mr-2">URLs:</h2>
+                <span>
+                  {Object.keys(result.urls).map((url, id) => {
+                    return (
+                      <>
+                        <a href={url} target="_blank" rel="noreferrer">
+                          {url}
+                        </a>
+                        {id !== Object.keys(result.urls).length - 1 && ", "}
+                      </>
+                    );
+                  })}
+                </span>
+              </div>
 
-            <div className="mb-3">
-              <span className="text-xl font-bold mb-3">DOM Inspections:</span>
-              <p className="text-sm mb-1 px-4">
-                <span className="font-bold">Login:</span>{" "}
-                {Object.values(result.inspects.login).filter(
-                  (item) => item.length
-                ).length
-                  ? "Yes"
-                  : "No"}
-              </p>
-              <p className="text-sm mb-1 px-4">
-                <span className="font-bold">Subsription:</span>{" "}
-                {Object.values(
-                  result.inspects.subscribe.inputBtnEls[0].subscribe
-                ).filter((item) => item.length).length
-                  ? "Yes"
-                  : "No"}
-              </p>
-              <p className="text-sm mb-1 px-4">
-                <span className="font-bold">LiveChat Integration:</span>{" "}
-                {Object.values(result.inspects.livechats).filter(
-                  (item) => item.length
-                ).length
-                  ? "Yes"
-                  : "No"}
-              </p>
-            </div>
+              <div className="mb-3">
+                <span className="text-xl font-bold mb-3">DOM Inspections:</span>
+                <p className="text-sm mb-1 px-4">
+                  <span className="font-bold">Login:</span>{" "}
+                  {Object.values(result.inspects.login).length ? "Yes" : "No"}
+                </p>
+                <p className="text-sm mb-1 px-4">
+                  <span className="font-bold">Subsription:</span>{" "}
+                  {Object.values(result.inspects.subscribe).length
+                    ? "Yes"
+                    : "No"}
+                </p>
+                <p className="text-sm mb-1 px-4">
+                  <span className="font-bold">LiveChat Integration:</span>{" "}
+                  {Object.values(result.inspects.livechats).length
+                    ? "Yes"
+                    : "No"}
+                </p>
+              </div>
 
-            <div>
-              <h2 className="text-xl font-bold mb-2 border-b border-gray-200 pb-2">Technologies:</h2>
-              <div className="responsive-row pt-2">
-                {result.technologies.map((technology) => {
-                  return <TechnologyCard technology={technology} />;
-                })}
+              <div className="mb-3">
+                <p className="text-sm mb-1 px-4">
+                  <span className="font-bold">Content size:</span>{" "}
+                  {result.size || "NA"}
+                </p>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2 border-b border-gray-200 pb-2">
+                  Technologies:
+                </h2>
+                <div className="responsive-row pt-2">
+                  {result.technologies.map((technology, id) => {
+                    return (
+                      <TechnologyCard
+                        technology={technology}
+                        key={technology.name + "_" + id}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="mx-auto text-center">
+              <p>{result.urls[Object.keys(result.urls)[0]].error}</p>
+            </div>
+          )
         ) : (
           <div className="mx-auto text-center">
-            <p>{result.urls[Object.keys(result.urls)[0]].error}</p>
+            <p>Not a valid url, please type in a valid url</p>
           </div>
         )
       ) : (
-        <div className="mx-auto text-center">
-          <p>Not a valid url, please type in a valid url</p>
-        </div>
-      ) : ""}
+        ""
+      )}
     </div>
   );
 }

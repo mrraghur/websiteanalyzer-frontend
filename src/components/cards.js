@@ -3,11 +3,12 @@ import { ReactComponent as Link } from "../assets/icons/link.svg";
 
 export const TechnologyCard = (props) => {
   const {
-    technology: { name, website, icon, categories, description }
+    technology: { name, website, icon, categories, description },
+    ...restProps
   } = props;
 
   return (
-    <div className="rounded-xl shadow-md bg-white flex flex-col">
+    <div className="rounded-xl shadow-md bg-white flex flex-col" {...restProps}>
       <div className="p-4 border-b border-gray-100 flex items-center gap-2">
         <img src={`/assets/icons/${icon}`} alt={icon} className="w-10 h-10" />
         <h1 className="text-lg font-bold">{name}</h1>
