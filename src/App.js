@@ -29,6 +29,50 @@ function App() {
       });
   };
 
+  // image
+  // video
+  // css
+  // js
+  // html
+
+  // useEffect(() => {
+  //   const fetchImage = () => {
+  //     const url =
+  //       "https://qph.cf2.quoracdn.net/main-qimg-4759e70eafecd6855be4e5884e213b39.webp";
+  //     const xhr = new XMLHttpRequest();
+  //     xhr.onreadystatechange = () => {
+  //       if (xhr.readyState === 4 && xhr.status === 200) {
+  //         // console.log("img-text", xhr.responseText);
+  //         console.log("img-length", xhr.getResponseHeader("Content-Length"));
+  //         console.log("img-all", xhr.getAllResponseHeaders());
+  //       }
+  //     };
+
+  //     xhr.open("GET", url, true);
+  //     xhr.send(null);
+  //   };
+
+  //   const fetchVideo = () => {
+
+  //     const url = URL.createObjectURL("blob:https://www.youtube.com/fd3107a0-61c6-4e53-b13f-5d6e6ced024d");
+  //     console.log(url);
+  //     const xhr = new XMLHttpRequest();
+  //     xhr.onreadystatechange = () => {
+  //       if (xhr.readyState === 4 && xhr.status === 200) {
+  //         console.log("vid-text", xhr.responseText);
+  //         console.log("vid-length", xhr.getResponseHeader("Content-Length"));
+  //         console.log("vid-all", xhr.getAllResponseHeaders());
+  //       }
+  //     };
+
+  //     xhr.open("GET", url, true);
+  //     xhr.send(null);
+  //   };
+
+  //   fetchImage();
+  //   fetchVideo();
+  // }, []);
+
   return (
     <div className="p-5">
       <h1 className="text-4xl text-center font-bold mb-5">Technology Lookup</h1>
@@ -65,7 +109,7 @@ function App() {
 
       {result ? (
         result.urls ? (
-          result.urls[Object.keys(result.urls)[0]].status > 0 ? (
+          !result.urls[Object.keys(result.urls)[0]].status.error ? (
             <div className="flex flex-col w-screen mx-auto p-4 rounded-md">
               <h1 className="text-3xl font-bold mb-4 border-b border-gray-200">
                 Result
@@ -76,12 +120,12 @@ function App() {
                 <span>
                   {Object.keys(result.urls).map((url, id) => {
                     return (
-                      <>
+                      <span key={url}>
                         <a href={url} target="_blank" rel="noreferrer">
                           {url}
                         </a>
                         {id !== Object.keys(result.urls).length - 1 && ", "}
-                      </>
+                      </span>
                     );
                   })}
                 </span>
@@ -108,10 +152,13 @@ function App() {
               </div>
 
               <div className="mb-3">
-                <p className="text-sm mb-1 px-4">
-                  <span className="font-bold">Content size:</span>{" "}
-                  {result.size || "NA"}
-                </p>
+                  <h2 className="font-bold mb-2 text-xl">Content size:</h2>
+                  {Object.entries(result.size).map(([key, value]) => (
+                    <p key={key} className="px-4 flex">
+                      <span className="font-bold capitalize w-20">{key}:</span>
+                      {` ${value} MB`}
+                    </p>
+                  ))}
               </div>
 
               <div>
