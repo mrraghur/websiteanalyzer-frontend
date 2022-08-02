@@ -135,30 +135,38 @@ function App() {
                 <span className="text-xl font-bold mb-3">DOM Inspections:</span>
                 <p className="text-sm mb-1 px-4">
                   <span className="font-bold">Login:</span>{" "}
-                  {Object.values(result.inspects.login).length ? "Yes" : "No"}
+                  {result.inspects?.login
+                    ? Object.values(result.inspects.login).length
+                      ? "Yes"
+                      : "No"
+                    : "No"}
                 </p>
                 <p className="text-sm mb-1 px-4">
                   <span className="font-bold">Subsription:</span>{" "}
-                  {Object.values(result.inspects.subscribe).length
-                    ? "Yes"
+                  {result.inspects?.subscribe
+                    ? Object.values(result.inspects.subscribe).length
+                      ? "Yes"
+                      : "No"
                     : "No"}
                 </p>
                 <p className="text-sm mb-1 px-4">
                   <span className="font-bold">LiveChat Integration:</span>{" "}
-                  {Object.values(result.inspects.livechats).length
-                    ? "Yes"
+                  {result.inspects?.livechats
+                    ? Object.values(result.inspects.livechats).length
+                      ? "Yes"
+                      : "No"
                     : "No"}
                 </p>
               </div>
 
               <div className="mb-3">
-                  <h2 className="font-bold mb-2 text-xl">Content size:</h2>
-                  {Object.entries(result.size).map(([key, value]) => (
-                    <p key={key} className="px-4 flex">
-                      <span className="font-bold capitalize w-24">{key}:</span>
-                      {` ${value} MB`}
-                    </p>
-                  ))}
+                <h2 className="font-bold mb-2 text-xl">Content size:</h2>
+                {Object.entries(result.size).map(([key, value]) => (
+                  <p key={key} className="px-4 flex">
+                    <span className="font-bold capitalize w-24">{key}:</span>
+                    {` ${value} MB`}
+                  </p>
+                ))}
               </div>
 
               <div>
