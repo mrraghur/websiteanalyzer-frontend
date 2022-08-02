@@ -155,7 +155,7 @@ function App() {
                   <h2 className="font-bold mb-2 text-xl">Content size:</h2>
                   {Object.entries(result.size).map(([key, value]) => (
                     <p key={key} className="px-4 flex">
-                      <span className="font-bold capitalize w-20">{key}:</span>
+                      <span className="font-bold capitalize w-24">{key}:</span>
                       {` ${value} MB`}
                     </p>
                   ))}
